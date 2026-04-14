@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"C:/myclass/ai_langchain/claude_ocr_1day/.claude/hooks/update_prd.py\"",
+            "timeout": 10,
+            "statusMessage": "PRD 동기화 여부 확인 중..."
+          }
+        ]
+      }
+    ]
+  }
+}

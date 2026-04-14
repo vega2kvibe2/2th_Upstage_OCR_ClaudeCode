@@ -1,0 +1,3 @@
+[     164ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=a501cb56:0
+[     167ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=d09248df:0
+[     173ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:5173/node_modules/.vite/deps/react.js?v=a501cb56:0
