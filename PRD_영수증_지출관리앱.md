@@ -821,7 +821,7 @@ module.exports = {
 ## 12. 프로젝트 디렉토리 구조
 
 ```
-receipt-tracker/
+claude_ocr_1day/
 ├── frontend/
 │     ├── src/
 │     │     ├── pages/
@@ -829,32 +829,50 @@ receipt-tracker/
 │     │     │     ├── UploadPage.jsx
 │     │     │     └── ExpenseDetail.jsx
 │     │     ├── components/
-│     │     │     ├── DropZone.jsx
-│     │     │     ├── ParsePreview.jsx
-│     │     │     ├── ExpenseCard.jsx
-│     │     │     ├── SummaryCard.jsx
-│     │     │     ├── FilterBar.jsx
-│     │     │     ├── Badge.jsx
-│     │     │     ├── Modal.jsx
-│     │     │     └── Toast.jsx
-│     │     └── api/
-│     │           └── axios.js        # Axios 인스턴스 및 API 함수
+│     │     │     ├── Header.jsx          # 공통 헤더 (로고 + 영수증 추가 버튼)
+│     │     │     ├── Badge.jsx           # 카테고리 색상 뱃지
+│     │     │     ├── Toast.jsx           # success/error/info 알림
+│     │     │     ├── DropZone.jsx        # 드래그 앤 드롭 업로드
+│     │     │     ├── ProgressBar.jsx     # OCR 처리 중 진행 표시
+│     │     │     ├── ParsePreview.jsx    # 파싱 결과 인라인 편집
+│     │     │     ├── SummaryCard.jsx     # 총 지출 / 이번달 / 카테고리 요약
+│     │     │     ├── FilterBar.jsx       # 날짜 범위 필터
+│     │     │     ├── ExpenseCard.jsx     # 지출 목록 카드
+│     │     │     ├── Modal.jsx           # 삭제 확인 다이얼로그
+│     │     │     ├── ReceiptImage.jsx    # 원본 영수증 이미지 미리보기
+│     │     │     └── EditForm.jsx        # 상세 편집 폼 (품목 추가/삭제 포함)
+│     │     ├── api/
+│     │     │     └── axios.js            # Axios 인스턴스 (VITE_API_BASE_URL)
+│     │     ├── App.jsx                   # BrowserRouter + 3개 Route
+│     │     ├── main.jsx
+│     │     └── index.css                # Tailwind base/components/utilities
+│     ├── index.html                     # Pretendard CDN 폰트
 │     ├── package.json
-│     └── vite.config.js
+│     ├── vite.config.js
+│     ├── tailwind.config.js             # 커스텀 keyframes 포함
+│     ├── postcss.config.js
+│     └── .env.local                     # VITE_API_BASE_URL (gitignore)
 ├── backend/
-│     ├── main.py                     # FastAPI 앱 진입점
+│     ├── main.py                        # FastAPI 앱, CORS, 정적 서빙
 │     ├── routers/
-│     │     ├── upload.py             # POST /api/upload
-│     │     ├── expenses.py           # GET, DELETE, PUT /api/expenses
-│     │     └── summary.py            # GET /api/summary
+│     │     ├── upload.py                # POST /api/upload
+│     │     ├── expenses.py              # GET, DELETE, PUT /api/expenses
+│     │     └── summary.py              # GET /api/summary
 │     ├── services/
-│     │     ├── ocr_service.py        # LangChain + Upstage 연동 로직
-│     │     └── storage_service.py    # expenses.json 읽기/쓰기
+│     │     ├── ocr_service.py           # UpstageDocumentParseLoader + solar-pro2
+│     │     └── storage_service.py       # expenses.json 읽기/쓰기/UUID
 │     ├── data/
-│     │     └── expenses.json
+│     │     └── expenses.json            # 데이터 저장소 (gitignore)
+│     ├── uploads/                       # 업로드 파일 저장 (gitignore)
+│     ├── .env                           # UPSTAGE_API_KEY (gitignore)
+│     ├── .env.example
 │     └── requirements.txt
-├── vercel.json
-└── README.md
+├── images/                              # 테스트용 샘플 영수증
+├── vercel.json                          # Vercel 프론트엔드 빌드 설정
+├── railway.toml                         # Railway 백엔드 배포 설정
+├── Procfile                             # Railway 프로세스 정의
+├── requirements.txt                     # Railway용 루트 requirements
+└── .gitignore
 ```
 
 ---
