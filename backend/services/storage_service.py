@@ -4,7 +4,10 @@ from datetime import datetime
 from pathlib import Path
 import os
 
-DATA_FILE = Path(os.getenv("DATA_FILE_PATH", "backend/data/expenses.json"))
+# Vercel 서버리스는 /tmp 만 쓰기 가능; 로컬은 backend/data/expenses.json 사용
+_IS_VERCEL = os.getenv("VERCEL") == "1"
+_DEFAULT_PATH = "/tmp/expenses.json" if _IS_VERCEL else "backend/data/expenses.json"
+DATA_FILE = Path(os.getenv("DATA_FILE_PATH", _DEFAULT_PATH))
 
 
 def load_expenses() -> list:

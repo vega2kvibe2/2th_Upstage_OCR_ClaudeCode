@@ -11,16 +11,18 @@ from backend.routers import upload, expenses, summary
 
 app = FastAPI(title="영수증 지출 관리 API", version="1.0.0")
 
+# 로컬(localhost:*)과 Vercel 프로덕션 도메인 모두 허용
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://localhost:\d+",
+    allow_origin_regex=r"https?://(?:localhost:\d+|[\w-]+\.vercel\.app)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# uploads 디렉토리 자동 생성
-uploads_dir = Path("backend/uploads")
+# Vercel 서버리스는 /tmp 만 쓰기 가능, 로컬은 backend/uploads 사용
+IS_VERCEL = os.getenv("VERCEL") == "1"
+uploads_dir = Path("/tmp/uploads") if IS_VERCEL else Path("backend/uploads")
 uploads_dir.mkdir(parents=True, exist_ok=True)
 
 app.include_router(upload.router, prefix="/api")

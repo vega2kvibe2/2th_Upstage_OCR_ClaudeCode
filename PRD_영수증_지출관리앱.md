@@ -867,11 +867,13 @@ claude_ocr_1day/
 │     ├── .env                           # UPSTAGE_API_KEY (gitignore)
 │     ├── .env.example
 │     └── requirements.txt
+├── api/
+│     └── index.py                       # Vercel 서버리스 진입점 (Mangum + FastAPI)
 ├── images/                              # 테스트용 샘플 영수증
-├── vercel.json                          # Vercel 프론트엔드 빌드 설정
+├── vercel.json                          # Vercel builds + routes 설정
 ├── railway.toml                         # Railway 백엔드 배포 설정
 ├── Procfile                             # Railway 프로세스 정의
-├── requirements.txt                     # Railway용 루트 requirements
+├── requirements.txt                     # 루트 requirements (Vercel/Railway 공용)
 └── .gitignore
 ```
 
@@ -919,6 +921,7 @@ langchain-upstage>=0.7.0
 pillow==10.3.0
 pdf2image==1.17.0
 python-dotenv==1.0.1
+mangum==0.17.0
 ```
 
 #### 완료 기준
@@ -1151,12 +1154,23 @@ export default api
 
 #### 8-1. Vercel 배포 설정
 
-| # | 작업 | 내용 |
-|---|------|------|
-| 8-1-1 | `vercel.json` 작성 | 프론트 빌드 + 백엔드 서버리스 라우팅 설정 |
-| 8-1-2 | GitHub 레포 연동 | Vercel 프로젝트 생성 → GitHub Import |
-| 8-1-3 | 환경변수 등록 | `UPSTAGE_API_KEY`, `VITE_API_BASE_URL`, `DATA_FILE_PATH` |
-| 8-1-4 | 첫 배포 실행 | `git push origin main` → 자동 빌드 트리거 |
+| # | 작업 | 내용 | 상태 |
+|---|------|------|------|
+| 8-1-1 | `vercel.json` 작성 | 프론트 빌드(`@vercel/static-build`) + 백엔드 서버리스(`@vercel/python` + Mangum) 라우팅 | ✅ 완료 |
+| 8-1-2 | GitHub 레포 연동 | Vercel 프로젝트 생성 → GitHub Import | ⬜ 수동 |
+| 8-1-3 | 환경변수 등록 | `UPSTAGE_API_KEY` (Vercel 대시보드) | ⬜ 수동 |
+| 8-1-4 | 첫 배포 실행 | `git push origin main` → 자동 빌드 트리거 | ⬜ 수동 |
+
+##### Vercel 등록 필수 환경변수
+
+| 키 | 값 | 비고 |
+|----|-----|------|
+| `UPSTAGE_API_KEY` | `up_xxx...` | Upstage 콘솔에서 복사 |
+| `VERCEL` | `1` | 자동 주입 (별도 설정 불필요) |
+
+> `VITE_API_BASE_URL`과 `DATA_FILE_PATH`는 설정하지 않아도 됩니다.
+> `VITE_API_BASE_URL`은 `.env.production`에서 `""`(빈값)으로 설정되어 같은 도메인 상대 경로를 사용하며,
+> `DATA_FILE_PATH`는 `VERCEL=1` 감지 시 자동으로 `/tmp/expenses.json`을 사용합니다.
 
 #### 8-2. E2E 시나리오 검증 체크리스트
 

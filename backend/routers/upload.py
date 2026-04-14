@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pathlib import Path
-import shutil
+import os
 import uuid
 
 from backend.services.ocr_service import parse_receipt
@@ -10,7 +10,8 @@ router = APIRouter()
 
 ALLOWED_TYPES = {"image/jpeg", "image/png", "application/pdf"}
 MAX_SIZE_BYTES = 10 * 1024 * 1024  # 10MB
-UPLOAD_DIR = Path("backend/uploads")
+IS_VERCEL = os.getenv("VERCEL") == "1"
+UPLOAD_DIR = Path("/tmp/uploads") if IS_VERCEL else Path("backend/uploads")
 
 
 @router.post("/upload")
